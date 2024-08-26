@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Watcher</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      #log {
+        white-space: pre-wrap; /* Preserve whitespace and line breaks */
+        background-color: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ccc;
+        max-height: 400px;
+        overflow-y: auto; /* Enable vertical scrolling */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Log Watcher</h1>
+    <div id="log"></div>
+
+    <!-- Include the Socket.IO client library -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io(); // Connect to the Socket.IO server
+
+      const logElement = document.getElementById('log'); // Get the log display element
+
+      // Listen for initial logs from the server
+      socket.on('initial_logs', (data) => {
+        logElement.textContent = data; // Display the initial logs
+      });
+
+      // Listen for new log updates from the server
+      socket.on('log_update', (newLines) => {
+        logElement.textContent += '\n' + newLines.join('\n'); // Append new logs
+        logElement.scrollTop = logElement.scrollHeight; // Scroll to the bottom
+      });
+    </script>
+  </body>
+</html>
